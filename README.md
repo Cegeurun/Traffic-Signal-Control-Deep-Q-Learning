@@ -1,12 +1,8 @@
-# Deep Q-Learning Agent for Traffic Signal Control
+This repository provides a PyTorch Deep Q-Learning framework for traffic signal optimization using SUMO. It includes ready-to-use command-line tools, configurable network options, and built-in graphing utilities.
 
-> **Note:** this project was refactored in November 2025 to improve clarity and modernize the tooling. The previous version is available at [this commit](https://github.com/AndreaVidali/Deep-QLearning-Agent-for-Traffic-Signal-Control/tree/8ee45192c0ef6b3d43dd660505a38b5030b79be7).
-
-A PyTorch-based Deep Q-Learning agent that learns to operate a single 4-way intersection in **SUMO**. The repo bundles a configurable training pipeline, a small CLI, and plotting utilities so you can focus on experimenting.
-
-- **Agent**: epsilon-greedy DQN with experience replay and a configurable fully connected network.
-- **Environment**: fixed SUMO intersection; state is 80 binary cells from discretized incoming lanes; 4 traffic-signal actions.
-- **Outputs**: trained model, copied settings, and plots for rewards, delay, and queue lengths.
+    **Algorithm**: Standard DQN featuring experience replay, dynamic exploration (epsilon-greedy), and customizable dense layers.
+    **Simulation State & Actions**: Operates on an 80-cell binary grid of incoming lane positions with 4 traffic signal phases.
+    **Outputs**: Automatically saves model weights, experiment configurations, and performance metrics (rewards, delays, queue sizes).
 
 ## Prerequisites
 
@@ -190,17 +186,3 @@ For each episode:
 
 - Prefer headless mode (`gui: false`) for training; enable the GUI only when debugging a run or for the testing phase.
 - If an output directory already exists, the CLI asks before overwriting it.
-
-## License
-
-MIT - see `LICENSE`.
-
-## Notes
-
-Hi 👋 my name is Andrea, the maintainer of this project.
-
-If you encounter a bug or need more information about this project, please open an issue.
-
-If this repo helped you and you’d like to say thanks, consider buying me a coffee:
-
-<a href="https://www.buymeacoffee.com/andreavidali" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
