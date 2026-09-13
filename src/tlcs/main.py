@@ -103,6 +103,9 @@ def training_session(settings_file: Path, out_path: Path) -> None:
         "cumulative_wait": [],
         "avg_queue_length": [],
     }
+    best_cumulative_wait = float("inf")
+    best_sum_neg_reward = float("-inf")
+    out_path.mkdir(parents=True, exist_ok=True)
 
     for episode in range(tot_episodes):
         logger.info(f"Episode {episode + 1} of {tot_episodes}")
@@ -142,13 +145,19 @@ def training_session(settings_file: Path, out_path: Path) -> None:
         last_cumulative_wait = training_stats["cumulative_wait"][-1]
         last_avg_queue_length = training_stats["avg_queue_length"][-1]
 
+        if (
+            last_cumulative_wait < best_cumulative_wait
+            or last_neg_reward > best_sum_neg_reward
+        ):
+            best_cumulative_wait = last_cumulative_wait
+            best_sum_neg_reward = last_neg_reward
+            agent.save_model(out_path)
+            logger.info(f"\tNew best model at episode {episode + 1}")
+
         logger.info(f"\tEpsilon: {agent.epsilon}")
         logger.info(f"\tReward: {last_neg_reward}")
         logger.info(f"\tCumulative wait: {last_cumulative_wait}")
         logger.info(f"\tAvg queue: {last_avg_queue_length}")
-
-    out_path.mkdir(parents=True, exist_ok=True)
-    agent.save_model(out_path)
 
     logger.info(f"Start time: {timestamp_start}")
     logger.info(f"End time: {datetime.now()}")
