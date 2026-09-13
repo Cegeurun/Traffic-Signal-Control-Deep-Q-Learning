@@ -82,7 +82,7 @@ class Agent:
 
         # Predict Q-values for current and next states
         q_values = self.model.predict_batch(states)
-        next_q_values = self.model.predict_batch(next_states)
+        next_q_values = self.model.predict_target_batch(next_states)
 
         # Prepare training data
         x = states
@@ -95,6 +95,10 @@ class Agent:
 
         # Train model on the updated Q-values
         self.model.train_batch(x, y)
+
+    def update_target_model(self) -> None:
+        """Update the target network used for stable Q-learning targets."""
+        self.model.update_target_model()
 
     def save_model(self, out_path: Path) -> None:
         """Save the underlying model to disk.

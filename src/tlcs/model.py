@@ -1,3 +1,4 @@
+from copy import deepcopy
 from pathlib import Path
 
 import numpy as np
@@ -94,7 +95,8 @@ class Model:
                 width=width,
             )
 
-        self.loss_fn = nn.MSELoss()
+        self.target_model = deepcopy(self.model)
+        self.loss_fn = nn.SmoothL1Loss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
     def _predict(self, states: NDArray) -> NDArray:
@@ -134,6 +136,18 @@ class Model:
             NDArray: Predicted values as array of shape (batch_size, output_dim).
         """
         return self._predict(states)
+
+    def predict_target_batch(self, states: NDArray) -> NDArray:
+        """Predict Q-values for next states with the target network."""
+        self.target_model.eval()
+        with torch.no_grad():
+            states = np.asarray(states, dtype=np.float32)
+            outputs = self.target_model(torch.from_numpy(states))
+            return outputs.cpu().numpy()
+
+    def update_target_model(self) -> None:
+        """Copy the online network parameters to the target network."""
+        self.target_model.load_state_dict(self.model.state_dict())
 
     def train_batch(self, states: NDArray, q_sa: NDArray) -> None:
         """Train the model on a batch of states and target values.

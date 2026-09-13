@@ -133,6 +133,7 @@ def training_session(settings_file: Path, out_path: Path) -> None:
                 gamma=settings.gamma,
                 batch_size=settings.batch_size,
             )
+        agent.update_target_model()
 
         training_stats = update_training_stats(
             episode_history=episode_history,

@@ -171,7 +171,7 @@ Reducing total wait yields positive reward.
 - Epsilon-greedy exploration: epsilon decays linearly from 1.0 to 0 over all training episodes.
 - Q-targets follow `r + gamma * max_a' Q(next_state, a')`.
 - Experience replay with warmup (`memory_size_min`) and bounded buffer (`memory_size_max`).
-- Neural network architecture configurable via `num_layers` and `width_layers`; trained with MSE loss and Adam.
+- Neural network architecture configurable via `num_layers` and `width_layers`; trained with Huber loss and Adam.
 
 For each episode:
 
